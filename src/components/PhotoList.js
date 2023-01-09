@@ -1,50 +1,32 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+// import axios from 'axios'
+import useAxios from 'axios-hooks';
 import style from './PhotoList.module.css'
 
 
 
 const PhotoList = () => {
 
-    const [photos, setPhotos] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState(false)
+    // const [photos, setPhotos] = useState([])
+    // const [isLoading, setIsLoading] = useState(true)
+    // const [error, setError] = useState(false)
 
-    useEffect(() => {
+    const [{ data, loading, error }, refetch] = useAxios(
+        'https://picsum.photos/v2/list'
+        );
 
-        const getPhotos = async () => {
-            const result = await axios('https://picsum.photos/v2/list')
-            setPhotos(result.data)
-        }
+    // useEffect(() => {
+
+    //     const getPhotos = async () => {
+    //         const result = await axios('https://picsum.photos/v2/list')
+    //         setPhotos(result.data)
+    //     }
         
-        getPhotos()
-        setIsLoading(false)
+    //     getPhotos()
+    //     setIsLoading(false)
 
+    // }, [])
 
-        // getPhotos()
-        //     .then((photos) => {
-        //         setPhotos(photos)
-        //         setIsLoading(false)
-        //     })
-        //     .catch((e) => {
-        //         setError(true)
-        //         setIsLoading(false)
-        //     })
-
-    }, [])
-
-    // const getPhotos = () =>
-    //     window
-    //         .fetch('https://picsum.photos/v2/list')
-    //         .then(async (response) => {
-    //             const data = await response.json()
-
-    //             if (response.ok) {
-    //                 return data
-    //             } else {
-    //                 return Promise.reject(data)
-    //             }
-    //         })
 
     const LoadingSpinner = () => {
         return (
@@ -62,10 +44,10 @@ const PhotoList = () => {
         <div>
             <h1>Photos</h1>
             {
-                isLoading ? <LoadingSpinner /> :
+                loading ? <LoadingSpinner /> :
                     <div className={style.grid}>
                         {
-                            photos.map(photo => (
+                            data.map((photo, index) => (
                                 <img key={photo.id} src={`https://picsum.photos/id/${photo.id}/200`} alt={`painted by ${photo.author}`} />
                             ))
                         }

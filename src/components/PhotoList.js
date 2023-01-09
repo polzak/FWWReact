@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import axios from 'axios'
 import style from './PhotoList.module.css'
 
 
@@ -11,40 +12,39 @@ const PhotoList = () => {
 
     useEffect(() => {
 
-        // setPhotos([
-        //     {
-        //         "id": "0",
-        //         "author": "Alejandro Escamilla",
-        //         "width": 5616,
-        //         "height": 3744,
-        //         "url": "https://unsplash.com/photos/yC-Yzbqy7PY",
-        //         "download_url": "https://picsum.photos/id/0/5616/3744"
-        //     }
-        // ])
-
+        const getPhotos = async () => {
+            const result = await axios('https://picsum.photos/v2/list')
+            setPhotos(result.data)
+        }
+        
         getPhotos()
-            .then((photos) => {
-                setPhotos(photos)
-                setIsLoading(false)
-            })
-            .catch((e) => {
-                setError(true)
-                setIsLoading(false)
-            })
+        setIsLoading(false)
+
+
+        // getPhotos()
+        //     .then((photos) => {
+        //         setPhotos(photos)
+        //         setIsLoading(false)
+        //     })
+        //     .catch((e) => {
+        //         setError(true)
+        //         setIsLoading(false)
+        //     })
+
     }, [])
 
-    const getPhotos = () =>
-        window
-            .fetch('https://picsum.photos/v2/list')
-            .then(async (response) => {
-                const data = await response.json()
+    // const getPhotos = () =>
+    //     window
+    //         .fetch('https://picsum.photos/v2/list')
+    //         .then(async (response) => {
+    //             const data = await response.json()
 
-                if (response.ok) {
-                    return data
-                } else {
-                    return Promise.reject(data)
-                }
-            })
+    //             if (response.ok) {
+    //                 return data
+    //             } else {
+    //                 return Promise.reject(data)
+    //             }
+    //         })
 
     const LoadingSpinner = () => {
         return (
